@@ -17,9 +17,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Planneroo',
-      home: Container(
-        child: HomePage()
+      theme: ThemeData(
+        backgroundColor: Color(0xFFF5FFF9),
+        primaryColor: Color(0xFFF5FFF9),
+        highlightColor: Color(0xFFF5FFF9)
       ),
+      home: HomePage(),
     );
   }
 }

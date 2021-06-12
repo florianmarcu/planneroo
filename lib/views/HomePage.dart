@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:planneroo/models/Day.dart';
+import 'package:planneroo/views/DayPage.dart';
+
+import '../models/Task.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -16,24 +20,28 @@ class _HomePageState extends State<HomePage> {
   String selectedMonth = DateFormat("MMM").format(DateTime.now().toLocal());
   int currentDayOfMonth = DateTime.now().toLocal().day;
 
+  List<Task> tasks = [
+    Task(
+      title: "Aniversare",
+      content: "Aniversarea mea",
+      type: TaskType.Goal
+    )
+  ];
+
   // Computes the month day related to the 'index' paramter
   // Adds 'noOfDays' to the first monday date in the calendar
   // if '30th of June' is the first monday, it adds 'noOfDays' to that particular date and returns its respective day number
-  int getDayNumberFromFirstDay(int noOfDays){
-    int currentDay = today.day; // 26th for ex
-    DateTime firstWeekDay = DateTime(today.year,today.month,currentDay%7);
+  DateTime getDateFromFirstDay(int noOfDays, int selectedMonth){
+    DateTime currentDay = DateTime(today.year, selectedMonth, today.day); // 26th for ex
+    DateTime firstWeekDay = DateTime(currentDay.year,currentDay.month,currentDay.day%7);
     DateTime firstMondayDate = firstWeekDay.subtract(Duration(days: firstWeekDay.weekday-1));
-    return firstMondayDate.add(Duration(days: noOfDays)).day;
-    // print(currentWeekday);
-    // print(currentDay);
-    // return (firstDay+30)%30;
-
+    return firstMondayDate.add(Duration(days: noOfDays));
   }
   
   @override
   Widget build(BuildContext context) {
-  // print(today.weekday);
-  print(getDayNumberFromFirstDay(0).toString() + " prima zi de luni");
+  // print(today.weekday); 
+  print(getDateFromFirstDay(0,6).day.toString() + " prima zi de luni");
 
     final themeData = Theme.of(context);
     //selectedMonth = 
@@ -43,12 +51,12 @@ class _HomePageState extends State<HomePage> {
         textTheme: TextTheme(
           bodyText2: TextStyle( // Style of the weekdays
             color: Colors.black,
-            fontSize: 18
-            //fontWeight: FontWeight.bold
-          )
+            fontSize: 18,
+          ),
         )
       ),
       child: Scaffold(
+      backgroundColor: Color(0xFFF5FFF9),
       appBar: AppBar(
         toolbarHeight: 80,
         elevation: 0,
@@ -84,6 +92,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: weekdays.map( (weekday) => Container(
                   width: MediaQuery.of(context).size.width/7-2,
+                  height: 27,
                   child: Text(
                     weekday
                   ),
@@ -93,33 +102,48 @@ class _HomePageState extends State<HomePage> {
             GridView.builder(
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 0.6,
                 crossAxisCount: 7
               ),
-              itemCount: 5*7,
+              itemCount: 6*7,
+              
               itemBuilder: (context, index) =>
-                Container(
-                  
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.1)
-                  ),
-                  width: MediaQuery.of(context).size.width/7-2,
-                  child: Text( /// The "current week of the day"
-                    getDayNumberFromFirstDay(index).toString(),
-                    //index+1 == currentDayOfMonth ? (index+1).toString() : ((index+1)%30).toString(),
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: Colors.lightBlue,
-                      //fontWeight: FontWeight.bold
+                InkWell(
+                  highlightColor: Color(0xFFF5FFF9),
+                  splashColor: Color(0xFFAED4BD),
+                  onTap:(){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DayPage(
+                        day: Day(
+                          date: getDateFromFirstDay(index-7, months.indexOf(selectedMonth)+1)
+                        ),
+                        heroTag: "date"+index.toString(),
+                      )));
+                  },
+                  child: Hero(
+                    tag: "date"+index.toString(),
+                    child: Material(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.1),
+                          color: Color(0xFFF5FFF9)
+                        ),
+                        height: 50,
+                        width: MediaQuery.of(context).size.width/7-2,
+                        child: Text( /// The "current week of the day"
+                          getDateFromFirstDay(index-7, months.indexOf(selectedMonth)+1).day.toString(),
+                          //index+1 == currentDayOfMonth ? (index+1).toString() : ((index+1)%30).toString(),
+                          style: TextStyle(
+                            fontSize: 23,
+                            color: Color(0xFF1E2419)
+                            //color: Color.fromRGBO(60, 73, 63, 100),
+                            //fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 )
               ),
-              // CalendarDatePicker(
-              //   lastDate: today,
-              //   firstDate: today,
-              //   initialDate: today,
-              //   onDateChanged: (date){},
-              // )
             ],
           )
         ),

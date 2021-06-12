@@ -3,7 +3,7 @@ import 'package:planneroo/models/Task.dart';
 
 class TaskPage extends StatefulWidget {
 
-  Task task;
+  final Task task;
 
   TaskPage({this.task});
 
