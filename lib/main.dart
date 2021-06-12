@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Planneroo',
+      //theme: ThemeData(fontFamily: 'Rubik'),
       home: Container(
         child: HomePage()
       ),
