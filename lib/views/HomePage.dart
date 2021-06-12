@@ -12,26 +12,28 @@ class _HomePageState extends State<HomePage> {
 
   final weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   final months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  //final currentMonth = DateFormat("MMMM").format(DateTime.now().toLocal());
-  // DateTime today = DateTime.now().toLocal();
-  DateTime today = DateTime(
-    2020,4,23
-  );
+  DateTime today = DateTime.now();
   String selectedMonth = DateFormat("MMM").format(DateTime.now().toLocal());
   int currentDayOfMonth = DateTime.now().toLocal().day;
 
-  int getFirstMonthDay(){
-    int currentWeekday = today.weekday;
-    int currentDay = today.day;
-    int firstDay = currentDay%7-currentWeekday;
-    print(currentWeekday);
-    print(currentDay);
-    return (firstDay+30)%30;
+  // Computes the month day related to the 'index' paramter
+  // Adds 'noOfDays' to the first monday date in the calendar
+  // if '30th of June' is the first monday, it adds 'noOfDays' to that particular date and returns its respective day number
+  int getDayNumberFromFirstDay(int noOfDays){
+    int currentDay = today.day; // 26th for ex
+    DateTime firstWeekDay = DateTime(today.year,today.month,currentDay%7);
+    DateTime firstMondayDate = firstWeekDay.subtract(Duration(days: firstWeekDay.weekday-1));
+    return firstMondayDate.add(Duration(days: noOfDays)).day;
+    // print(currentWeekday);
+    // print(currentDay);
+    // return (firstDay+30)%30;
+
   }
   
   @override
   Widget build(BuildContext context) {
-  print(getFirstMonthDay());
+  // print(today.weekday);
+  print(getDayNumberFromFirstDay(0).toString() + " prima zi de luni");
 
     final themeData = Theme.of(context);
     //selectedMonth = 
@@ -73,6 +75,7 @@ class _HomePageState extends State<HomePage> {
       ),
       //extendBodyBehindAppBar: true,
       body: Container(
+        padding: EdgeInsets.symmetric(horizontal:7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -80,7 +83,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: weekdays.map( (weekday) => Container(
-                  width: MediaQuery.of(context).size.width/7,
+                  width: MediaQuery.of(context).size.width/7-2,
                   child: Text(
                     weekday
                   ),
@@ -95,12 +98,14 @@ class _HomePageState extends State<HomePage> {
               itemCount: 5*7,
               itemBuilder: (context, index) =>
                 Container(
+                  
                   decoration: BoxDecoration(
                     border: Border.all(width: 0.1)
                   ),
-                  width: MediaQuery.of(context).size.width/7,
+                  width: MediaQuery.of(context).size.width/7-2,
                   child: Text( /// The "current week of the day"
-                    index+1 == currentDayOfMonth ? (index+1).toString() : ((index+1)%30).toString(),
+                    getDayNumberFromFirstDay(index).toString(),
+                    //index+1 == currentDayOfMonth ? (index+1).toString() : ((index+1)%30).toString(),
                     style: TextStyle(
                       fontSize: 23,
                       color: Colors.lightBlue,
@@ -109,6 +114,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               ),
+              // CalendarDatePicker(
+              //   lastDate: today,
+              //   firstDate: today,
+              //   initialDate: today,
+              //   onDateChanged: (date){},
+              // )
             ],
           )
         ),
