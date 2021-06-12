@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "423522324068",
+    "project_id": "plannerooapp",
+    "storage_bucket": "plannerooapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423522324068:android:4c7e4622bc61db27f35971",
+        "android_client_info": {
+          "package_name": "com.planneroo.planneroo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423522324068-rpf631pg6e8184q6dajq84r52m2ip04c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs1ejwNrggdxzVtrms2UlRb5dvsDHV-6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423522324068-rpf631pg6e8184q6dajq84r52m2ip04c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
