@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planneroo/models/Day.dart';
+import 'package:planneroo/services/authentication.dart';
 import 'package:planneroo/views/DayPage.dart';
+import 'package:planneroo/views/widgets/MainDrawer.dart';
 
 import '../models/Task.dart';
 
@@ -56,97 +58,103 @@ class _HomePageState extends State<HomePage> {
         )
       ),
       child: Scaffold(
-      backgroundColor: Color(0xFFF5FFF9),
-      appBar: AppBar(
-        toolbarHeight: 80,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: DropdownButton(
-          items: months.map(
-            (month)=> DropdownMenuItem(
-              value: month,
-              child: Text(
-                month,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 25
-                ),
-              ),
-            )
-          ).toList(),
-          value: selectedMonth,
-          onChanged: (month)=>
-            setState(()=>
-              selectedMonth = month 
-            ),
-        )
-      ),
-      //extendBodyBehindAppBar: true,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal:7),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 30,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: weekdays.map( (weekday) => Container(
-                  width: MediaQuery.of(context).size.width/7-2,
-                  height: 27,
-                  child: Text(
-                    weekday
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFF8B635C),
+          child: Icon(Icons.add),
+          onPressed: (){},
+        ),
+        backgroundColor: Color(0xFFF5FFF9),
+        drawer: MainDrawer(),
+        appBar: AppBar(
+          toolbarHeight: 80,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: DropdownButton(
+            items: months.map(
+              (month)=> DropdownMenuItem(
+                value: month,
+                child: Text(
+                  month,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 25
                   ),
-                )
-              ).toList(),
-            ),
-            GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.6,
-                crossAxisCount: 7
+                ),
+              )
+            ).toList(),
+            value: selectedMonth,
+            onChanged: (month)=>
+              setState(()=>
+                selectedMonth = month 
               ),
-              itemCount: 6*7,
-              
-              itemBuilder: (context, index) =>
-                InkWell(
-                  highlightColor: Color(0xFFF5FFF9),
-                  splashColor: Color(0xFFAED4BD),
-                  onTap:(){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DayPage(
-                        day: Day(
-                          date: getDateFromFirstDay(index-7, months.indexOf(selectedMonth)+1)
-                        ),
-                        heroTag: "date"+index.toString(),
-                      )));
-                  },
-                  child: Hero(
-                    tag: "date"+index.toString(),
-                    child: Material(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 0.1),
-                          color: Color(0xFFF5FFF9)
-                        ),
-                        height: 50,
-                        width: MediaQuery.of(context).size.width/7-2,
-                        child: Text( /// The "current week of the day"
-                          getDateFromFirstDay(index-7, months.indexOf(selectedMonth)+1).day.toString(),
-                          //index+1 == currentDayOfMonth ? (index+1).toString() : ((index+1)%30).toString(),
-                          style: TextStyle(
-                            fontSize: 23,
-                            color: Color(0xFF1E2419)
-                            //color: Color.fromRGBO(60, 73, 63, 100),
-                            //fontWeight: FontWeight.bold
+          )
+        ),
+        //extendBodyBehindAppBar: true,
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal:7),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: weekdays.map( (weekday) => Container(
+                    width: MediaQuery.of(context).size.width/7-2,
+                    height: 27,
+                    child: Text(
+                      weekday
+                    ),
+                  )
+                ).toList(),
+              ),
+              GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.6,
+                  crossAxisCount: 7
+                ),
+                itemCount: 6*7,
+                
+                itemBuilder: (context, index) =>
+                  InkWell(
+                    highlightColor: Color(0xFFF5FFF9),
+                    splashColor: Color(0xFFAED4BD),
+                    onTap:(){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> DayPage(
+                          day: Day(
+                            date: getDateFromFirstDay(index-7, months.indexOf(selectedMonth)+1)
+                          ),
+                          heroTag: "date"+index.toString(),
+                        )));
+                    },
+                    child: Hero(
+                      tag: "date"+index.toString(),
+                      child: Material(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 0.1),
+                            color: Color(0xFFF5FFF9)
+                          ),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width/7-2,
+                          child: Text( /// The "current week of the day"
+                            getDateFromFirstDay(index-7, months.indexOf(selectedMonth)+1).day.toString(),
+                            //index+1 == currentDayOfMonth ? (index+1).toString() : ((index+1)%30).toString(),
+                            style: TextStyle(
+                              fontSize: 23,
+                              color: Color(0xFF1E2419)
+                              //color: Color.fromRGBO(60, 73, 63, 100),
+                              //fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )
-              ),
-            ],
-          )
-        ),
+                  )
+                ),
+              ],
+            )
+          ),
       ),
     );
   }
