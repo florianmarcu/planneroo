@@ -1,3 +1,3 @@
 # planneroo
- An amazing calendar app
+ An amazing calendar app  
  Detalii despre barem in wiki
