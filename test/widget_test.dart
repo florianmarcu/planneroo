@@ -15,16 +15,29 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    var day = find.widgetWithText(Text, '10');
+    expect(day, findsOneWidget);
+    await tester.tap(day);
     await tester.pump();
 
+    var addBtn = find.byIcon(Icons.add);
+    expect(addBtn, findsOneWidget);
+    await tester.tap(addBtn);
+    await tester.pump();
+    //await tester.tap(find.by)
+    //expect()
+    //expect(find.text('Jan'), findsWidgets);
+
+    // Verify that our counter starts at 0.
+    // expect(find.text('0'), findsOneWidget);
+    // expect(find.text('1'), findsNothing);
+
+    // Tap the '+' icon and trigger a frame.
+    // await tester.tap(find.byIcon(Icons.add));
+    // await tester.pump();
+
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // expect(find.text('0'), findsNothing);
+    // expect(find.text('1'), findsOneWidget);
   });
 }
